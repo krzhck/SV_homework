@@ -1,0 +1,115 @@
+%% compile with xelatex
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[UTF8]{ctex}
+\usepackage{homework}
+
+\title{作业 3}
+\duedate{Apr 17, 2022}
+% TODO your name and ID
+\studentname{你的姓名}
+\studentid{你的学号}
+
+\usepackage{tikz}
+\usetikzlibrary{automata,shapes,positioning,arrows}
+
+%% logical symbols
+% \land     /\
+% \lor      \/
+% \lnor     (negation)
+% \to       ->
+% \lequiv   <->
+% \models   |=
+\newcommand{\lequiv}{\leftrightarrow}
+\newcommand{\func}[1]{\textbf{#1}}
+
+% 模型：$\mathcal{M} = (\mathcal{D}, \mathcal{I})$
+% 论域：$\mathcal{D}$
+% 解释：$\mathcal{I}$
+\newcommand{\model}{\mathcal{M}}
+\newcommand{\domain}{\mathcal{D}}
+\newcommand{\interpretation}{\mathcal{I}}
+
+% 变量赋值：$\assignment: \varset \to \domain$
+\let\mapping\rho
+\let\assignment\rho
+\let\env\mapping
+
+% 语义：$|[\cdot|]$
+\newcommand{\sem}[1]{|[#1|]}                        % 程序语义 / 无下标的语义
+\newcommand{\plsem}[1]{|[#1|]_{\assignment}}        % 命题逻辑语义
+\newcommand{\fosem}[1]{|[#1|]_{\model,\assignment}} % 一阶逻辑语义
+
+% 语义蕴涵和语义等价: $\simply, \sequiv$
+\let\simply\entails
+\let\sequiv\Leftrightarrow
+
+\begin{document}
+
+\maketitle
+
+\textit{在开始完成作业前，请仔细阅读以下说明：}
+\begin{itemize}
+    \item 我们提供作业的\LaTeX 源码，你可以在其中直接填充你的答案并编译PDF（请使用xelatex）。
+    当然，你也可以使用别的方式完成作业（例如撰写纸质作业后扫描到PDF文件之中）。
+    但是请注意，最终的提交一定只是PDF文件。提交时请务必\emph{再次核对}，防止提交错误。
+    \item 在你的作业中，请务必填写你的\emph{姓名}和\emph{学号}，并检查是否有题目遗漏。请重点注意每次作业的\emph{截止时间}。
+    截止时间之后你仍可以联系助教补交作业，但是我们会按照如下公式进行分数的折扣：
+    \begin{align*}
+        \text{作业分数} = \min\left(\text{实际分}, \text{满分}\times\left(1 - 10\%\times\min\left(\lceil\text{迟交周数}\rceil, 10\right)\right)\right).
+    \end{align*}
+    \item 本次作业为独立作业，\emph{禁止}抄袭等一切不诚信行为。作业中，如果涉及参考资料，请\emph{引用}注明。
+\end{itemize}
+
+%% problem begins
+
+\problem{循环}
+
+\subproblem 在扩展IMP语言中，下面两个语句是否语义等价，如果等价请给出证明，否则给出反例。
+\begin{itemize}
+    \item $?p$
+    \item $\textbf{if}(p)\ \textbf{skip}\ \textbf{else}\ ?\textbf{false}$
+\end{itemize}
+\begin{solution}
+    % TODO
+\end{solution}
+
+
+\subproblem \textbf{repeat-until}是另一种常见的循环形式，它的定义如下：
+$$\textbf{repeat}\ st\ \textbf{until}(p)\equiv st;(?\neg p;st)^*;?p$$
+求证下面的霍尔三元组：
+\begin{align*}
+    \frac{
+        \{\varphi\}\ st\ \{\varphi'\} \;\;\;\;
+        \{\varphi'\wedge\neg p\}\ st\ \{\varphi'\}
+    }{\{\varphi\}\ \textbf{repeat}\ st\ \textbf{until}(p)\ \{\varphi'\wedge p\}}
+\end{align*}
+\begin{solution}
+    % TODO
+\end{solution}
+
+\newpage
+\problem{数组}
+\subproblem 基于数组理论$\mathcal{T}_A$（及其扩展）编码以下陈述：
+\begin{enumerate}
+    \item 数组$a$不含有两个相同的元素；
+    \item 数组$a$和$b$具有完全相同的元素，则对两者同一位置进行相同更新操作之后，数组$a$和$b$的元素仍然相同。
+\end{enumerate}
+
+\begin{solution}
+    % TODO
+\end{solution}
+
+\subproblem 在扩展IMP语言中，试证明下面的霍尔三元组成立：
+\begin{align*}
+    &\left\{m < a[0] \wedge i = 0\right\}\ \\
+    &\textbf{while}(i < n)\left\{
+        \textbf{if}(m < a[i])\ m := a[i];\ i := i + 1\ \textbf{else}\ \textbf{skip}
+    \right\}\ \\
+    &\left\{\forall k. \left(0\le k < n \rightarrow m \ge a[k]\right)\right\}
+\end{align*}
+\begin{solution}
+    % TODO
+\end{solution}
+
+\end{document}
