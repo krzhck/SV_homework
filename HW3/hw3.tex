@@ -3,12 +3,13 @@
 
 \usepackage[UTF8]{ctex}
 \usepackage{homework}
+\usepackage{CJKutf8}
 
 \title{作业 3}
 \duedate{Apr 17, 2022}
 % TODO your name and ID
-\studentname{你的姓名}
-\studentid{你的学号}
+\studentname{周雨豪}
+\studentid{2018013399}
 
 \usepackage{tikz}
 \usetikzlibrary{automata,shapes,positioning,arrows}
@@ -72,6 +73,15 @@
 \end{itemize}
 \begin{solution}
     % TODO
+    等价
+    \begin{align*}
+    	\llbracket{if(p)\ skip\ else\ ?false}\rrbracket =\ & \{(s,s')\ |\ \llbracket{p}\rrbracket_s=true\ and\ (s,s')\in\llbracket{skip}\rrbracket_s\\
+		&\ or\ \llbracket{p}\rrbracket_s=false\ and \ (s,s')\in\llbracket{?false}\rrbracket_s\}\\
+		=\ & \{(s,s')\ |\ \llbracket{p}\rrbracket_s=true\ and\ (s,s')\in \{(r,r)\ |\ r\in \mathcal{S}\}\\
+		&\ or\ \llbracket{p}\rrbracket_s=false\ and \ (s,s')\in\{(t,t)\ |\ (t\models false)\}\}\\
+		=\ &\{(s,s)\ |\ s\models p\} \\
+		=\ &[?p]
+    \end{align*}
 \end{solution}
 
 
@@ -86,18 +96,26 @@ $$\textbf{repeat}\ st\ \textbf{until}(p)\equiv st;(?\neg p;st)^*;?p$$
 \end{align*}
 \begin{solution}
     % TODO
-\end{solution}
+    \begin{align*}
+    	\frac{}{\{\varphi\}\ st\ \{\varphi'\wedge p\}}\ &\frac{\overline{\{\varphi\}\ ?\neg p\ \{\varphi'\wedge p\}}\ \overline{\{\varphi\}\ st\ \{\varphi'\wedge p\}}}{\{\varphi\}\ (?\neg p;st)^*\ \{\varphi'\wedge p\}}\ \frac{}{\{\varphi\}\ ?p\ \{\varphi'\wedge p\}}\\
+    	&\overline{\{\varphi\}\ st;(?\neg p;st)^*;?p\ \{\varphi'\wedge p\}} \\
+    	&\overline{\{\varphi\}\ \textbf{repeat}\ st\ \textbf{until}(p)\ \{\varphi'\wedge p\}}
+    \end{align*}\end{solution}
 
 \newpage
 \problem{数组}
 \subproblem 基于数组理论$\mathcal{T}_A$（及其扩展）编码以下陈述：
 \begin{enumerate}
-    \item 数组$a$不含有两个相同的元素；
+	\item 数组$a$不含有两个相同的元素；
     \item 数组$a$和$b$具有完全相同的元素，则对两者同一位置进行相同更新操作之后，数组$a$和$b$的元素仍然相同。
 \end{enumerate}
 
 \begin{solution}
     % TODO
+    \begin{enumerate}
+	    \item $\forall i ,j (i \neq j \rightarrow a[i]\neq a[j])$
+    	\item $(a=b)\rightarrow(\forall i, (a\langle{i\triangleleft v}\rangle \land b\langle{i\triangleleft v}\rangle)\rightarrow (a=b))$
+	\end{enumerate}
 \end{solution}
 
 \subproblem 在扩展IMP语言中，试证明下面的霍尔三元组成立：
@@ -110,6 +128,12 @@ $$\textbf{repeat}\ st\ \textbf{until}(p)\equiv st;(?\neg p;st)^*;?p$$
 \end{align*}
 \begin{solution}
     % TODO
+    记$\varphi = \forall k.(0\leq k<i\rightarrow m\geq a[k])$，$\psi=\varphi\land(i<n)\land(m<a[i])$
+    \begin{align*}
+    	\frac{\overline{\{\psi\}\ m := a[i]\ \{\varphi\}}\ \overline{\{\psi\}\ i := i + 1\ \{\varphi\}}}{\{\psi\}\ m := a[i];\ i := i + 1\ \{\varphi\}}\ \frac{\overline{\{\varphi\}\textbf{skip}\{\varphi\}}}{\{\psi\}\ \textbf{skip}\ \{\varphi\}}\\
+    	\overline{\{\varphi\land(i<n)\}\ \textbf{if}(m < a[i])\ m := a[i];\ i := i + 1\ \textbf{else}\ \textbf{skip}\ \{\varphi\}} \\
+    	\overline{\{\varphi\}\ \textbf{while}(i < n)\left\{\textbf{if}(m < a[i])\ m := a[i];\ i := i + 1\ \textbf{else}\ \textbf{skip}\right\}\ \{\varphi \land (i\geq n)\}} \\
+    	\overline{\left\{m < a[0] \wedge i = 0\right\}\ \textbf{while}(i < n)\left\{\textbf{if}(m < a[i])\ m := a[i];\ i := i + 1\ \textbf{else}\ \textbf{skip}\right\}\ \left\{\forall k. \left(0\le k < n \rightarrow m \ge a[k]\right)\right\}}
+    \end{align*}
 \end{solution}
-
 \end{document}
