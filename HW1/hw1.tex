@@ -1,0 +1,181 @@
+%!TEX program = xelatex
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[UTF8]{ctex}
+\usepackage{homework}
+\usepackage{amsmath}
+
+\title{作业 1}
+\duedate{Mar 20, 2022}
+% TODO your name and ID
+\studentname{周雨豪}
+\studentid{2018013399}
+
+\usepackage{tikz}
+\usetikzlibrary{automata,shapes,positioning,arrows}
+
+%% logical symbols
+% \land     /\
+% \lor      \/
+% \lnor     (negation)
+% \to       ->
+% \lequiv   <->
+% \models   |=
+\newcommand{\lequiv}{\leftrightarrow}
+\newcommand{\func}[1]{\textbf{#1}}
+
+% 模型：$\mathcal{M} = (\mathcal{D}, \mathcal{I})$
+% 论域：$\mathcal{D}$
+% 解释：$\mathcal{I}$
+\newcommand{\model}{\mathcal{M}}
+\newcommand{\domain}{\mathcal{D}}
+\newcommand{\interpretation}{\mathcal{I}}
+
+% 变量赋值：$\assignment: \varset \to \domain$
+\let\mapping\rho
+\let\assignment\rho
+\let\env\mapping
+
+% 语义：$|[\cdot|]$
+\newcommand{\sem}[1]{|[#1|]}                        % 程序语义 / 无下标的语义
+\newcommand{\plsem}[1]{|[#1|]_{\assignment}}        % 命题逻辑语义
+\newcommand{\fosem}[1]{|[#1|]_{\model,\assignment}} % 一阶逻辑语义
+
+% 语义蕴涵和语义等价: $\simply, \sequiv$
+\let\simply\entails
+\let\sequiv\Leftrightarrow
+
+\begin{document}
+
+\maketitle
+
+\textit{在开始完成作业前，请仔细阅读以下说明：}
+\begin{itemize}
+    \item 我们提供作业的\LaTeX 源码，你可以在其中直接填充你的答案并编译PDF（请使用xelatex）。
+    当然，你也可以使用别的方式完成作业（例如撰写纸质作业后扫描到PDF文件之中）。
+    但是请注意，最终的提交一定只是PDF文件。提交时请务必\emph{再次核对}，防止提交错误。
+    \item 在你的作业中，请务必填写你的\emph{姓名}和\emph{学号}，并检查是否有题目遗漏。请重点注意每次作业的\emph{截止时间}。
+    截止时间之后你仍可以联系助教补交作业，但是我们会按照如下公式进行分数的折扣：
+    \begin{align*}
+        \text{作业分数} = \min\left(\text{实际分}, \text{满分}\times\left(1 - 10\%\times\min\left(\lceil\text{迟交周数}\rceil, 10\right)\right)\right).
+    \end{align*}
+    \item 本次作业为独立作业，\emph{禁止}抄袭等一切不诚信行为。作业中，如果涉及参考资料，请\emph{引用}注明。
+\end{itemize}
+
+%% problem begins
+
+\problem{判断题}
+
+给定下列陈述，请判断其是否正确。如果错误，请给出反例或解释原因。
+
+\subproblem 给定任意的命题逻辑公式，它是否为有效式一定是可判定的。
+
+\begin{solution}
+    True
+\end{solution}
+
+\subproblem 给定命题逻辑公式$F$和$G$，如果$F$是有效的且$G$不是有效的，
+则$F\rightarrow G$一定不可满足。
+
+\begin{solution}
+    False. 当G取值为True时候$F\rightarrow G$取值为True，所以并非不可满足
+\end{solution}
+
+\subproblem 给定命题逻辑公式$F$和$G$，如果$F$是可满足的且$\neg G$是不可满足的，则$F\wedge G$一定可满足。
+
+\begin{solution}
+    True
+\end{solution}
+
+\subproblem 任意给定一个一阶逻辑公式，一定可以在有限时间内判定其是否有效。
+
+\begin{solution}
+    False. 如果公式非有效式则无法在有限时间内判定
+\end{solution}
+
+\newpage
+\problem{解答题}
+\subproblem 考虑下列公式：
+$$(P \to (Q \to R)) \to (\lnot R \to (\lnot Q \to \lnot P))$$
+请列出它的真值表，并判断：1）它是否有效；2）它是否可满足。
+
+\begin{solution}
+    % TODO
+	$$
+		\begin{tabular}{c|c|c|c|c|c}
+    	P & Q & R & $P\rightarrow (Q\rightarrow R))$ &
+    	$\lnot R\rightarrow (\lnot Q \rightarrow \lnot P)$ & 原式 \\
+    	\hline
+    	0 & 0 & 0 & 1 & 1 & 1 \\
+    	0 & 0 & 1 & 1 & 1 & 1 \\
+   		0 & 1 & 0 & 1 & 1 & 1 \\
+   		0 & 1 & 1 & 1 & 1 & 1 \\
+   		1 & 0 & 0 & 1 & 0 & 0 \\
+    	1 & 0 & 1 & 1 & 1 & 1 \\
+    	1 & 1 & 0 & 0 & 1 & 1 \\
+    	1 & 1 & 1 & 1 & 1 & 1 \\
+  		\end{tabular}
+	$$
+	1）非有效；2）可满足 \\
+\end{solution}
+
+\subproblem 在下列公式中，请标记出所有变元的自由出现：
+\begin{equation*}
+    \forall x. (f(x) \land \exists y.g(x, y, z)) \land \exists z. g(x, y, z)
+\end{equation*}
+
+\begin{solution}
+	\begin{equation*}
+    	\forall x. (f(x) \land \exists y.g(x, y, \underline{z})) \land \exists z. g(\underline{x}, \underline{y}, z)
+	\end{equation*}
+	见下划线字母 \\
+\end{solution}
+
+\subproblem 考虑论域$\domain = \{\circ, \bullet\}$以及下面的解释函数
+\begin{itemize}
+  \item $\interpretation(f) = \{(\circ, \circ)\mapsto \circ, (\circ, \bullet)\mapsto \bullet, (\bullet, \circ)\mapsto \bullet, (\bullet, \bullet)\mapsto \bullet\}$
+  \item $\interpretation(g) = \{\circ \mapsto \bullet, \bullet \mapsto \circ\}$
+  \item $\interpretation(p) = \{(\bullet, \circ), (\bullet, \bullet)\}$
+\end{itemize}
+求公式$\forall x.p(f(g(x), x), x)$的取值。
+
+\begin{solution}
+	\begin{align*}
+		&x\mapsto \circ \\
+		&\llbracket g(x)\rrbracket=\interpretation(g)(\llbracket x\rrbracket)=\interpretation(g)(\circ)=\bullet \\
+		&\llbracket f(g(x),x)\rrbracket=\interpretation(f)(\llbracket g(x)\rrbracket,\llbracket x\rrbracket)=\interpretation(f)(\bullet,\circ)=\bullet \\
+		&\llbracket p(f(g(x),x),x)\rrbracket=\interpretation(p)(\bullet,\circ)=true \\
+    	&x\mapsto \bullet \\
+    	&\llbracket g(x)\rrbracket=\interpretation(g)(\llbracket x\rrbracket)=\interpretation(g)(\bullet)=\circ \\
+		&\llbracket f(g(x),x)\rrbracket=\interpretation(f)(\llbracket g(x)\rrbracket,\llbracket x\rrbracket)=\interpretation(f)(\circ,\bullet)=\bullet \\
+		&\llbracket p(f(g(x),x),x)\rrbracket=\interpretation(p)(\bullet,\bullet)=true
+	\end{align*}
+	所以$\forall x.p(f(g(x),x))$取值为true \\
+\end{solution}
+
+\subproblem 请使用课程教授的相继式演算系统（包含命题逻辑中的10条规则和4条量词消去规则）构建推导树证明下列两个相继式：
+\begin{enumerate}
+    \item $\exists x.(p(x)\rightarrow q(x)) \vdash \forall y.p(y) \rightarrow \exists z.q(z)$
+    \item $\forall y.p(y)\rightarrow \exists z.q(z) \vdash \exists x.(p(x)\rightarrow q(x))$
+\end{enumerate}
+
+\begin{solution}
+    \begin{align*}
+    1.& \\
+	&\overline{p(c) \vdash p(c), q(c)} \	 \  \overline{p(c),q(c) \vdash q(c)} &\mbox{切}\\
+	&\overline{p(c)\rightarrow q(c), p(c) \vdash q(c)} &\mbox{左蕴含}\\
+	&\overline{p(c)\rightarrow q(c) \vdash \neg p(c), q(c)} &\mbox{右否定}\\
+	&\overline{p(c)\rightarrow q(c) \vdash \neg p(c), \exists z.q(z)} &\mbox{右存在}\\
+	&\overline{p(c)\rightarrow q(c), p(c) \vdash \exists z.q(z)} &\mbox{左否定}\\
+	&\overline{p(c)\rightarrow q(c), \forall y.p(y) \vdash \exists z.q(z)} &\mbox{左全称}\\
+	&\overline{\exists x.(p(x)\rightarrow q(x)), \forall y.p(y) \vdash \exists z.q(z)} &\mbox{左存在}\\
+	&\overline{\exists x.(p(x)\rightarrow q(x)) \vdash \forall y.p(y) \exists z.q(z)} &\mbox{右蕴含}\\
+	2.& \\
+	&\overline{p(z)\rightarrow q(z)\vdash p(z)\rightarrow q(z)} &\mbox{切} \\
+	&\overline{p(z)\rightarrow \exists z.q(z)\vdash p(z)\rightarrow q(z)} &\mbox{左存在} \\
+	&\overline{\forall y.p(y)\rightarrow \exists z.q(z)\vdash p(z)\rightarrow q(z)} &\mbox{左全称} \\
+	&\overline{\forall y.p(y)\rightarrow \exists z.q(z)\vdash \exists x.(p(x)\rightarrow q(x))} &\mbox{右存在} \\
+	\end{align*}
+\end{solution}
+
+\end{document}
