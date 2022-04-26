@@ -1,0 +1,145 @@
+%% compile with xelatex
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[UTF8]{ctex}
+\usepackage{homework}
+
+\title{作业 4}
+\duedate{May 8, 2022}
+% TODO your name and ID
+\studentname{你的姓名}
+\studentid{你的学号}
+
+\usepackage{tikz}
+\usepackage{listings}
+\usetikzlibrary{automata,shapes,positioning,arrows}
+\lstdefinelanguage{pimp}{
+  morekeywords={assume, while, and, do, od, if, fi, then, else, skip, int, not, return, assert, print, procedure, true, false, requires, ensures}, 
+  sensitive=false, 
+  morecomment=[l][\color{blue}]{//}, 
+  morecomment=[s][\color{purple}]{/*}{*/}, 
+  morestring=[b]", 
+}
+
+\lstset{
+  basicstyle=\ttfamily,
+  language=pimp,
+  escapechar=|,
+  literate=%
+  {~}{{$\neg$}}1        % \neg
+  {-}{{-}}1             % prevent ``-'' being replaced by math minus
+  {delta}{{$\Delta$}}1  % \Delta
+}
+%% logical symbols
+% \land     /\
+% \lor      \/
+% \lnor     (negation)
+% \to       ->
+% \lequiv   <->
+% \models   |=
+\newcommand{\lequiv}{\leftrightarrow}
+\newcommand{\func}[1]{\textbf{#1}}
+
+% 模型：$\mathcal{M} = (\mathcal{D}, \mathcal{I})$
+% 论域：$\mathcal{D}$
+% 解释：$\mathcal{I}$
+\newcommand{\model}{\mathcal{M}}
+\newcommand{\domain}{\mathcal{D}}
+\newcommand{\interpretation}{\mathcal{I}}
+
+% 变量赋值：$\assignment: \varset \to \domain$
+\let\mapping\rho
+\let\assignment\rho
+\let\env\mapping
+
+% 语义：$|[\cdot|]$
+\newcommand{\sem}[1]{|[#1|]}                        % 程序语义 / 无下标的语义
+\newcommand{\plsem}[1]{|[#1|]_{\assignment}}        % 命题逻辑语义
+\newcommand{\fosem}[1]{|[#1|]_{\model,\assignment}} % 一阶逻辑语义
+
+% 语义蕴涵和语义等价: $\simply, \sequiv$
+\let\simply\entails
+\let\sequiv\Leftrightarrow
+
+\begin{document}
+
+\maketitle
+
+\textit{在开始完成作业前，请仔细阅读以下说明：}
+\begin{itemize}
+    \item 我们提供作业的\LaTeX 源码，你可以在其中直接填充你的答案并编译PDF（请使用xelatex）。
+    当然，你也可以使用别的方式完成作业（例如撰写纸质作业后扫描到PDF文件之中）。
+    但是请注意，最终的提交一定只是PDF文件。提交时请务必\emph{再次核对}，防止提交错误。
+    \item 在你的作业中，请务必填写你的\emph{姓名}和\emph{学号}，并检查是否有题目遗漏。请重点注意每次作业的\emph{截止时间}。
+    截止时间之后你仍可以联系助教补交作业，但是我们会按照如下公式进行分数的折扣：
+    \begin{align*}
+        \text{作业分数} = \min\left(\text{实际分}, \text{满分}\times\left(1 - 10\%\times\min\left(\lceil\text{迟交周数}\rceil, 10\right)\right)\right).
+    \end{align*}
+    \item 本次作业为独立作业，\emph{禁止}抄袭等一切不诚信行为。作业中，如果涉及参考资料，请\emph{引用}注明。
+\end{itemize}
+
+%% problem begins
+
+\problem{谓词变换}
+
+\subproblem 计算下列最弱前置条件。
+\begin{itemize}
+    \item $wlp(b[m]:=b[n];b[n]:=t, b[m] < b[n])$
+    \item $wlp(\textbf{if}\ y > 2\ \textbf{then}\ x:= y - 5\ \textbf{else}\ x:= -y, x \ge 0)$
+\end{itemize}
+\begin{solution}
+    % TODO
+\end{solution}
+
+\subproblem 利用最弱前置条件推导，证明下列程序属性的正确性。
+\begin{lstlisting}
+// {true}
+n := 0;
+x := 0;
+while (r |$\neq$| 0) {
+  n := n + 1;
+  x := x + 2 |$\times$| n - 1;
+  r := r - 1;
+}
+//{x = n |\color{blue}$\times$| n}
+\end{lstlisting}
+
+\textit{提示：考虑使用循环不变式：$x = n \times n$。}
+\newpage
+\problem{基本路径}
+\subproblem 请写出过程Proc\_A的\emph{所有}基本路径。
+\begin{lstlisting}
+/* requires x > 0;
+   ensures rv = 0; */
+procedure Proc_M(x);
+
+/* requires y > 0;
+   ensures rv |\color{purple}$\ge$| 0; */
+procedure Proc_A(y) {
+    if (y > 10)
+    {
+        v := Proc_M(y);
+        assert(v |$\ge$| 0);
+        return v;
+    }
+    while(y > 0)
+    /* invariant: y |\color{purple}$\ge$| 0 */
+    {
+        t := y;
+        while(t > 0)
+        /* invariant: t |\color{purple}$\ge$| 0 |\color{purple}$\wedge$| y |\color{purple}$\ge$| t */
+        {
+            t := t - 1;
+        }
+        y := y - 1;
+    }
+    return 0;
+}
+
+\end{lstlisting}
+\begin{solution}
+    % TODO
+\end{solution}
+
+
+\end{document}
