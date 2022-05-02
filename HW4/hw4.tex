@@ -7,8 +7,8 @@
 \title{作业 4}
 \duedate{May 8, 2022}
 % TODO your name and ID
-\studentname{你的姓名}
-\studentid{你的学号}
+\studentname{周雨豪}
+\studentid{2018013399}
 
 \usepackage{tikz}
 \usepackage{listings}
@@ -89,6 +89,21 @@
 \end{itemize}
 \begin{solution}
     % TODO
+    \begin{align*}
+	    &wlp(b[m]:=b[n];b[n]:=t, b[m] < b[n]) \\
+	    =\ &wlp(b[m]:=b[n],wlp(b[n]:=t,b[m]<b[n])) \\
+	    =\ &wlp(b[m]:=b[n],(b[m]<b[n])[b\rightarrow b\langle{n\triangleleft t}\rangle]) \\
+	    =\ &wlp(b[m]:=b[n],(b\langle{n\triangleleft t}\rangle[m]<b\langle{n\triangleleft t}\rangle[n])) \\
+	    =\ &wlp(b[m]:=b[n],b[m]<t) \\
+	    =\ &(b[m]<t)[b\rightarrow b\langle{m\triangleleft b[n]}\rangle] \\
+	    =\ &(b\langle{m\triangleleft b[n]}\rangle[m]<t) \\
+	    =\ &b[n]<t \\
+    	&wlp(\textbf{if}\ y > 2\ \textbf{then}\ x:= y - 5\ \textbf{else}\ x:= -y, x \ge 0) \\
+	   	=\ &(y>2\rightarrow wlp(x:=y-5,x\geq 0))\land(\neg(y>2)\rightarrow wlp(x:=-y,x\geq 0)) \\
+	   	=\ &(y>2\rightarrow y-5\geq 0)\land(\neg(y>2)\rightarrow -y\geq 0) \\
+	   	=\ &(y\leq 2 \lor y\geq 5)\land(y>2\lor y\leq 0) \\
+	   	=\ &y\leq 0\lor y\geq 5
+    \end{align*}
 \end{solution}
 
 \subproblem 利用最弱前置条件推导，证明下列程序属性的正确性。
@@ -105,6 +120,34 @@ while (r |$\neq$| 0) {
 \end{lstlisting}
 
 \textit{提示：考虑使用循环不变式：$x = n \times n$。}
+\begin{solution}
+\begin{lstlisting}
+// {0 = 0 |\color{blue}$\times$| 0}
+n := 0;
+// {0 = n |\color{blue}$\times$| n}
+x := 0;
+// {x = n |\color{blue}$\times$| n}
+while (r |$\neq$| 0) {...}
+// {x = n |\color{blue}$\times$| n}
+\end{lstlisting}
+	\begin{align*}
+		\text{前置条件}&\ \varphi:\ true \\
+		\text{后置条件}&\ \psi:\ x=n\times n \land r=0 \\
+		\text{循环不变式}&\ I:\ x=n\times n \\
+		\text{验证条件}&:\\
+		&1.\ I\land \neg(r\neq 0)\models \psi \\
+		&2.\ I\land r\neq 0 \models wlp(n:=n+1;x:=x+2\times n-1;r:=r-1,I) \\
+		&3.\ true\models 0=0\times 0 \\
+		\text{验证条件}&\text{1、3均成立，对于验证条件2：}\\
+		&wlp(n:=n+1;x:=x+2\times n-1;r:=r-1,I)\\
+		=\ &wlp(n:=n+1,wlp(x:=x+2\times n-1,wlp(r:=r-1,I))) \\
+		=\ &wlp(n:=n+1,wlp(x:=x+2\times n-1,x=n\times n)) \\
+		=\ &wlp(n:=n+1,x+2\times n-1=n\times n) \\
+		=\ &(x+2\times(n+1)-1=(n+1)\times(n+1)) \\
+		=\ &(x=n\times n)=I \\
+		\text{由此验证}&\text{条件2成立，示例程序满足给定规约。}
+	\end{align*}
+\end{solution}
 \newpage
 \problem{基本路径}
 \subproblem 请写出过程Proc\_A的\emph{所有}基本路径。
@@ -139,6 +182,54 @@ procedure Proc_A(y) {
 \end{lstlisting}
 \begin{solution}
     % TODO
+    \begin{align*}
+    	\text{第一条基本路径}& \\
+    	&\{y>0\} \\
+    	&\textbf{assume}\ y>10; \\
+    	&\{y>0\} \\
+    	\text{第二条基本路径}& \\
+    	&\{y>0\} \\
+    	&\textbf{assume}\ y>10; \\
+    	&\textbf{assume}\ v_M=0 \\
+    	&v:=v_M \\
+    	&\textbf{assume}\ v\geq 0; \\
+    	&rv:=v \\
+    	&\{rv\geq0\} \\
+    	\text{第三条基本路径}& \\
+    	&\{y>0\} \\
+    	&\textbf{assume}\ y>10; \\
+    	&\textbf{assume}\ v_M=0 \\
+    	&v:=v_M \\
+    	&\textbf{assume}\ v < 0; \\
+    	&\{\text{错误状态}\} \\
+    	\text{第四条基本路径}& \\
+    	&\{y>0\} \\
+    	&\textbf{assume}\ y\leq 10;\\
+    	&\{y\geq 0\}\\
+    	\text{第五条基本路径}& \\
+    	&\{y\geq 0\} \\
+    	&\textbf{assume}\ y>0; \\
+    	&t:=y \\
+    	&\{t \geq 0 \land y \geq t\} \\
+    	\text{第六条基本路径}& \\
+    	&\{t \geq 0 \land y \geq t\} \\
+    	&\textbf{assume}\ t>0; \\
+    	&t:=t-1; \\
+    	&\{t \geq 0 \land y \geq t\} \\
+    \end{align*}
+    	
+   	\begin{align*}
+    	\text{第七条基本路径}& \\
+    	&\{t \geq 0 \land y \geq t\} \\
+    	&\textbf{assume}\ t\leq0; \\
+    	&y:=y-1; \\
+    	&\{y\geq 0\} \\
+    	\text{第八条基本路径}& \\
+    	&\{y\geq 0\} \\
+    	&\textbf{assume}\ y\leq 0; \\
+    	&rv:=0; \\
+    	&\{rv\geq 0\} \\
+    \end{align*}
 \end{solution}
 
 

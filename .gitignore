@@ -1,3 +1,4 @@
-*/lecture/*
+lecture/
 .DS_Store
-*/DS_Store
+*/.texpadtmp/
+
